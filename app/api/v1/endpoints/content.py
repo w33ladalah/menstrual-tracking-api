@@ -5,8 +5,11 @@ from typing import List, Optional
 from app.db.session import get_db
 from app.schemas.content import Content, ContentCreate, ContentUpdate, ContentResponse
 from app.crud.content import content_crud
+from app.api.deps import get_current_active_user
+from app.models.user import User
 
 router = APIRouter()
+
 
 @router.get("/content", response_model=List[Content])
 async def get_content(
@@ -54,7 +57,8 @@ async def get_content_by_id(
 @router.post("/content", response_model=Content)
 async def create_content(
     content: ContentCreate,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """Create new content"""
     return await content_crud.create(db, obj_in=content)
@@ -63,7 +67,8 @@ async def create_content(
 async def update_content(
     content_id: int,
     content: ContentUpdate,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """Update existing content"""
     db_content = await content_crud.get(db, id=content_id)
@@ -74,7 +79,8 @@ async def update_content(
 @router.post("/content/{content_id}/like")
 async def like_content(
     content_id: int,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """Increment like count for content"""
     content = await content_crud.get(db, id=content_id)
@@ -88,7 +94,8 @@ async def like_content(
 @router.post("/content/{content_id}/share")
 async def share_content(
     content_id: int,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """Increment share count for content"""
     content = await content_crud.get(db, id=content_id)

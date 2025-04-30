@@ -113,6 +113,37 @@ After starting the application, you can access the interactive API documentation
 - Swagger UI: `http://localhost:8000/docs`
 - ReDoc: `http://localhost:8000/redoc`
 
+### Authentication
+
+The API uses JWT (JSON Web Token) authentication to secure endpoints. To access protected endpoints:
+
+1. Register a user account using the `/api/v1/auth/register` endpoint
+2. Obtain a JWT token by sending a POST request to `/api/v1/auth/login` with your credentials
+3. Include the token in the `Authorization` header of your requests: `Bearer <your_token>`
+
+Most content endpoints are protected and require authentication, except for the public educational resources endpoint (`/api/v1/content/public/educational`), which is accessible without authentication.
+
+Example authentication flow:
+
+```bash
+# Register a new user
+curl -X POST "http://localhost:8000/api/v1/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "username": "testuser", "password": "securepassword"}'
+
+# Login to get token
+curl -X POST "http://localhost:8000/api/v1/auth/login" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=user@example.com&password=securepassword"
+
+# Access protected endpoint with token
+curl -X GET "http://localhost:8000/api/v1/content/content" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+# Access public educational content (no authentication required)
+curl -X GET "http://localhost:8000/api/v1/content/public/educational"
+```
+
 ## Development
 
 ### Running Tests
