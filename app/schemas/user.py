@@ -4,14 +4,15 @@ from datetime import datetime
 
 class UserBase(BaseModel):
     email: EmailStr
-    full_name: Optional[str] = None
-    is_active: Optional[bool] = True
+    username: str
+    is_active: bool = True
+    is_superuser: bool = False
 
 class UserCreate(UserBase):
     password: str
 
 class UserUpdate(UserBase):
-    password: Optional[str] = None
+    password: str | None = None
 
 class UserInDBBase(UserBase):
     id: int

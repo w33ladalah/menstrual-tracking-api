@@ -2,6 +2,9 @@ from sqlalchemy import Column, String, DateTime, Boolean, JSON, Text, Integer
 from app.db.base import Base
 
 class Content(Base):
+    __tablename__ = "content"
+
+    id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     content_type = Column(String, nullable=False)  # article, tip, inspiration
     content = Column(Text, nullable=False)

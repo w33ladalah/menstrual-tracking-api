@@ -1,5 +1,4 @@
-version: '3.8'
-
+name: menstrual-tracking-backend
 services:
   api:
     build: .
@@ -14,7 +13,7 @@ services:
     depends_on:
       - db
       - redis
-
+      - adminer
   db:
     image: postgres:15
     ports:
@@ -32,6 +31,15 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+
+  adminer:
+    image: adminer
+    platform: linux/arm64
+    restart: always
+    ports:
+      - 8088:8080
+    depends_on:
+      - db
 
 volumes:
   postgres_data:

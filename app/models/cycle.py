@@ -3,6 +3,9 @@ from sqlalchemy.orm import relationship
 from app.db.base import Base
 
 class Cycle(Base):
+    __tablename__ = "cycle"
+
+    id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
     start_date = Column(DateTime, nullable=False)
     end_date = Column(DateTime)

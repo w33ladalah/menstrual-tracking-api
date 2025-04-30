@@ -2,6 +2,7 @@ from typing import List, Optional
 from app.crud.base import CRUDBase
 from app.models.content import Content
 from app.schemas.content import ContentCreate, ContentUpdate
+from sqlalchemy.ext.asyncio import AsyncSession
 
 class CRUDContent(CRUDBase[Content, ContentCreate, ContentUpdate]):
     async def get_by_type(
