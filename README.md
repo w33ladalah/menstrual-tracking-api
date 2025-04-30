@@ -90,7 +90,11 @@ I created this application to help my daughter monitor and track her menstrual c
    POSTGRES_USER=postgres
    POSTGRES_PASSWORD=postgres
    POSTGRES_DB=menstrual_tracking
+   POSTGRES_PORT=5432
    REDIS_HOST=localhost
+   REDIS_PORT=6379
+   REDIS_DB=0
+   SECRET_KEY=your-secret-key-change-in-production
    ```
 
 5. Run database migrations:
@@ -115,11 +119,19 @@ After starting the application, you can access the interactive API documentation
 Coming soon
 
 ### Database Migrations
+
+The application uses Alembic for database migrations, which is configured to read settings from the `.env` file.
+
 To create a new migration after changing models:
 ```bash
 alembic revision --autogenerate -m "Description of changes"
 alembic upgrade head
 ```
+
+#### How Environment Variables Work with Alembic
+- Environment variables are loaded from the `.env` file using Pydantic Settings
+- Alembic's `env.py` script imports the settings and dynamically configures the database URL
+- This ensures consistency between your application and migration settings
 
 ## License
 Coming soon

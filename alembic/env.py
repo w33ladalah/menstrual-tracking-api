@@ -10,6 +10,9 @@ from sqlalchemy import pool
 
 from alembic import context
 
+# Import settings from app
+from app.core.config import settings
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -27,12 +30,10 @@ if config.config_file_name is not None:
 from app.db.base import Base
 target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
-
-config.set_main_option('sqlalchemy.url', config.get_main_option('sqlalchemy.url').replace('+asyncpg', '+psycopg2'))
+# Set the database URL from settings
+# We need to use psycopg2 instead of asyncpg for Alembic
+database_url = f"postgresql+psycopg2://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_SERVER}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+config.set_main_option('sqlalchemy.url', database_url)
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
